@@ -2,19 +2,19 @@
 
 namespace Database.Models;
 
-public class Department: IModel
+public class DepartmentModel: IModel
 {
     public int Id { get; set; }
     public string? Name { get; set; }
     public DateTime ? CreatedAt { get; set; }
     public List<DoctorModel>? Doctors { get; set; }
     
-    public Department()
+    public DepartmentModel()
     {
         Doctors = new List<DoctorModel>();
     }
     
-    public Department(int id, string name, DateTime createdAt)
+    public DepartmentModel(int id, string name, DateTime createdAt)
     {
         Id = id;
         Name = name;
@@ -22,7 +22,7 @@ public class Department: IModel
         Doctors = new List<DoctorModel>();
     }
     
-    public Department(int id, string name, DateTime createdAt, List<DoctorModel> doctors)
+    public DepartmentModel(int id, string name, DateTime createdAt, List<DoctorModel> doctors)
     {
         Id = id;
         Name = name;

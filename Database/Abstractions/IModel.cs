@@ -1,6 +1,6 @@
 ﻿namespace Database.Abstractions;
 
-public class IModel
+public interface IModel
 {
     
 }
