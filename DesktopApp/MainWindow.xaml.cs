@@ -1,24 +1,35 @@
-﻿using System.Text;
+﻿using System.Data.SqlClient;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Database.DBProvider;
 
 namespace DesktopApp;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow : Window
 {
+    private DatabaseProvider _provider;
     public MainWindow()
     {
         InitializeComponent();
-        MainWindowFrame.Navigate(new Pages.LoginPage());
+        var connectionString = @"Server=(localdb)\MSSQLLocalDB;Database=Hospital;Trusted_Connection=True";
+        _provider = new DatabaseProvider(connectionString);
+    }
+
+    [Obsolete("Obsolete")]
+    private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            await _provider.InitializeDatabaseAsync();
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception.Message);
+            await _provider.ResetDatabaseAsync();
+            await _provider.InitializeDatabaseAsync();
+        }
+        finally
+        {
+            MainWindowFrame.Navigate(new Pages.LoginPage(_provider));
+        }
     }
 }

@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="Hospital Desktop App" Height="450" Width="800" MinWidth="630" MinHeight="430"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized" Icon="Assets/Icon/logo.ico" Background="#212121">
-    <Frame x:Name="MainWindowFrame"></Frame>
+        WindowState="Maximized" Icon="Assets/Icon/logo.ico" Background="#212121"
+        Loaded="MainWindow_OnLoaded">
+    <Frame x:Name="MainWindowFrame" NavigationUIVisibility="Hidden"></Frame>
 </Window>
