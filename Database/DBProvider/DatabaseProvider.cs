@@ -13,6 +13,21 @@ public class DatabaseProvider
     {
         _connectionString = connectionString;
     }
+    
+    public async Task<int> InsertDoctorAndPatientByUserLogin(string login, string patientName)
+    {
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.ExecuteAsync("USE Hospital");
+        return await connection.ExecuteAsync(DbCommands.InsertDoctorAndPatientByUserLogin(login, patientName));
+    }
+
+    public async Task<List<PatientModel>> GetPatientsByDoctorLogin(string login)
+    {
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.ExecuteAsync("USE Hospital");
+        var result = await connection.QueryAsync<PatientModel>(DbCommands.GetPatientsByDoctorLogin(login));
+        return result.ToList();
+    }
         
     [Obsolete("Obsolete")]
     public async Task<int> CreateUserAsync(UserModel user)
