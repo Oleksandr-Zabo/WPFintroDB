@@ -12,7 +12,7 @@ public partial class HomePage : UserControl
     UserModel _user;
     private DatabaseProvider? _databaseProvider;
     private DepartmentDoctorPatients? _departmentDoctorPatients;
-    private DoctorAndPatientsRepository<DepartmentDoctorPatients?>? _doctorAndPatientsRepository;
+    private DoctorAndPatientsRepository<IEnumerable<dynamic>>? _doctorAndPatientsRepository;
 
     public HomePage(UserModel user, DatabaseProvider? databaseProvider)
     {
@@ -23,34 +23,35 @@ public partial class HomePage : UserControl
        
     }
 
-    private void OnAddClick(object sender, RoutedEventArgs e)
+    private async void OnAddClick(object sender, RoutedEventArgs e)
     {
-        
-    }
-    
-    void FillDataGrid(DepartmentDoctorPatients departmentDoctorPatients)
-    {
-        foreach (var doctor in departmentDoctorPatients.Patients)
+        try
         {
-            var dataGridCells = new List<DataGridCell>();
-            var dataGridCell = new DataGridCell();
-            dataGridCell.Content = doctor.Key;
-            dataGridCells.Add(dataGridCell);
-            dataGridCell = new DataGridCell();
-            dataGridCell.Content = doctor.Value;
-            dataGridCells.Add(dataGridCell);
-            dgMarkAndSubject.Items.Add(dataGridCells);
+            await _doctorAndPatientsRepository?.AddDoctorAndPatientsByUserLogin(_user.login, tbDoctor.Text, tbPatient.Text);
+            await RefreshDataGrid();
         }
-        dgMarkAndSubject.Items.Refresh();
+        catch (Exception exception)
+        {
+            MessageBox.Show(exception.Message, "System Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async Task RefreshDataGrid()
+    {
+        var items = await _doctorAndPatientsRepository?.GetDoctorAndPatientsByUserLogin(_user.login);
+        dgDoctorAndPatient.ItemsSource = items;
+        dgDoctorAndPatient.UpdateLayout();
     }
 
     private async void HomePage_OnLoaded(object sender, RoutedEventArgs e)
     {
-        _departmentDoctorPatients = await _doctorAndPatientsRepository?.GetDoctorAndPatientsByUserLogin(_user.login);
-        if (_departmentDoctorPatients != null)
+        try
         {
-            FillDataGrid(_departmentDoctorPatients);
+            await RefreshDataGrid();
         }
-        
+        catch (Exception exception)
+        {
+            MessageBox.Show(exception.Message, "System Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }

@@ -27,6 +27,13 @@
         <TextBox x:Name="tbDoctor" Foreground="Azure" FontSize="14" Grid.Column="0" Width="Auto" VerticalAlignment="Stretch" Style="{StaticResource MaterialDesignFilledTextBox}" Margin="10 10 10 0"/>
         <TextBox x:Name="tbPatient" Foreground="Azure" FontSize="14" Grid.Column="1" Style="{StaticResource MaterialDesignFilledTextBox}" Margin="0 10 10 0"/>
         <Button Foreground="Azure" Grid.Column="2"  Content="Add" Margin="0 10 10 0" Click="OnAddClick"/>
-        <DataGrid x:Name="dgMarkAndSubject" Grid.ColumnSpan="3" Grid.Row = "1" Margin="10"/>
+        <DataGrid x:Name="dgDoctorAndPatient" Grid.ColumnSpan="4" Grid.Row = "1" Margin="10" AutoGenerateColumns="False">
+            <DataGrid.Columns>                
+                <DataGridTextColumn Header="Id" Binding="{Binding PatientId}" Width="0.10*"/>
+                <DataGridTextColumn Header="Doctor" Binding="{Binding DoctorName}" Width="0.35*"/>
+                <DataGridTextColumn Header="PatientId" Binding="{Binding PatientId}" Width="0.15*"/>
+                <DataGridTextColumn Header="Patient" Binding="{Binding PatientName}" Width="0.40*"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

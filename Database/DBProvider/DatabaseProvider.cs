@@ -14,19 +14,27 @@ public class DatabaseProvider
         _connectionString = connectionString;
     }
     
-    public async Task<int> InsertDoctorAndPatientByUserLogin(string login, string patientName)
+    public async Task<int> InsertDoctorAndPatientByUserLogin(string login, string doctorName, string patientName)
     {
         await using var connection = new SqlConnection(_connectionString);
         await connection.ExecuteAsync("USE Hospital");
-        return await connection.ExecuteAsync(DbCommands.InsertDoctorAndPatientByUserLogin(login, patientName));
+        int result = await connection.ExecuteAsync(DbCommands.InsertDoctorAndPatientByUserLogin(login, doctorName, patientName));
+        return result;
     }
 
-    public async Task<List<PatientModel>> GetPatientsByDoctorLogin(string login)
+    public async Task<IEnumerable<dynamic>> GetPatientsAndDoctorByUserLogin(string login)
     {
         await using var connection = new SqlConnection(_connectionString);
         await connection.ExecuteAsync("USE Hospital");
-        var result = await connection.QueryAsync<PatientModel>(DbCommands.GetPatientsByDoctorLogin(login));
-        return result.ToList();
+        // TO_DO: Refactor this (if no DB - has error)
+        var result = await connection.QueryAsync(DbCommands.GetPatientsByDoctorLogin(login));
+        var enumerable = result.ToList();
+        if (enumerable.ToList().Count == 0)
+        {
+            return null;
+        }
+
+        return enumerable;
     }
         
     [Obsolete("Obsolete")]

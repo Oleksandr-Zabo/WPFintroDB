@@ -6,7 +6,6 @@
         {
             public int Id { get; set; }
             public List<string>? Patients { get; set; }
-            public int DoctorId { get; set; }
         
             public PatientModel()
             {
@@ -17,6 +16,5 @@
             {
                 Id = id;
                 Patients = patients;
-                DoctorId = doctorId;
             }
         }

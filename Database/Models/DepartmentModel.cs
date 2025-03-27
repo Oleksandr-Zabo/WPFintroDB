@@ -6,7 +6,7 @@ public class DepartmentModel: IModel
 {
     public int Id { get; set; }
     public string? Name { get; set; }
-    public DateTime ? CreatedAt { get; set; }
+    public int UserId { get; set; }
     public List<DoctorModel>? Doctors { get; set; }
     
     public DepartmentModel()
@@ -14,19 +14,19 @@ public class DepartmentModel: IModel
         Doctors = new List<DoctorModel>();
     }
     
-    public DepartmentModel(int id, string name, DateTime createdAt)
+    public DepartmentModel(int id, string name, int userId)
     {
         Id = id;
         Name = name;
-        CreatedAt = createdAt;
+        UserId = userId;
         Doctors = new List<DoctorModel>();
     }
     
-    public DepartmentModel(int id, string name, DateTime createdAt, List<DoctorModel> doctors)
+    public DepartmentModel(int id, string name, int userId,  List<DoctorModel> doctors)
     {
         Id = id;
         Name = name;
-        CreatedAt = createdAt;
+        UserId = userId;
         Doctors = doctors;
     }
 }

@@ -4,7 +4,7 @@
             
             namespace Database.Repository;
             
-            public class DoctorAndPatientsRepositoryImpl : DoctorAndPatientsRepository<DepartmentDoctorPatients?>
+            public class DoctorAndPatientsRepositoryImpl : DoctorAndPatientsRepository<IEnumerable<dynamic>?>
             {
                 private readonly DatabaseProvider _databaseProvider;
                 public DoctorAndPatientsRepositoryImpl(DatabaseProvider databaseProvider)
@@ -12,27 +12,20 @@
                     _databaseProvider = databaseProvider;
                 }
             
-                public override async Task<DepartmentDoctorPatients?> GetDoctorAndPatientsByUserLogin(string login)
+                public override async Task<IEnumerable<dynamic>?> GetDoctorAndPatientsByUserLogin(string login)
                 {
-                    var result = await _databaseProvider.GetPatientsByDoctorLogin(login);
+                    var result = await _databaseProvider.GetPatientsAndDoctorByUserLogin(login);
                     if (result == null || !result.Any())
                     {
                         return null;
                     }
             
-                    var departmentDoctorPatients = new DepartmentDoctorPatients
-                    {
-                        Department = new DepartmentModel(), // Assuming you need to set the department here
-                        Patients = result.GroupBy(p => p.DoctorId)
-                                         .ToDictionary(g => new DoctorModel { Id = g.Key }, g => g.ToList())
-                    };
-            
-                    return departmentDoctorPatients;
+                    return result;
                 }
             
                 public override async Task<bool> AddDoctorAndPatientsByUserLogin(string login, string doctor, string patient)
                 {
-                    var result = await _databaseProvider.InsertDoctorAndPatientByUserLogin(login, patient);
+                    var result = await _databaseProvider.InsertDoctorAndPatientByUserLogin(login, doctor, patient);
                     return result > 0;
                 }
             }
